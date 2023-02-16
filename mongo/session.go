@@ -46,6 +46,11 @@ type sessionContext struct {
 	Session
 }
 
+type ISessionContext interface {
+	context.Context
+	SetMongoSession(key interface{}, session Session)
+}
+
 type sessionKey struct {
 }
 
@@ -56,6 +61,15 @@ func NewSessionContext(ctx context.Context, sess Session) SessionContext {
 		Session: sess,
 	}
 }
+
+// NewSessionContext creates a new SessionContext associated with the given Context and Session parameters.
+func SetContextSession(ctx context.Context, sess Session) SessionContext {
+	return &sessionContext{
+		Context: context.WithValue(ctx, sessionKey{}, sess),
+		Session: sess,
+	}
+}
+
 
 // SessionFromContext extracts the mongo.Session object stored in a Context. This can be used on a SessionContext that
 // was created implicitly through one of the callback-based session APIs or explicitly by calling NewSessionContext. If
