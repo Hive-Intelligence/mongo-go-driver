@@ -63,11 +63,8 @@ func NewSessionContext(ctx context.Context, sess Session) SessionContext {
 }
 
 // NewSessionContext creates a new SessionContext associated with the given Context and Session parameters.
-func SetContextSession(ctx context.Context, sess Session) SessionContext {
-	return &sessionContext{
-		Context: context.WithValue(ctx, sessionKey{}, sess),
-		Session: sess,
-	}
+func SetContextSession(ctx ISessionContext, sess Session) {
+	ctx.SetMongoSession(sessionKey{},sess)
 }
 
 
